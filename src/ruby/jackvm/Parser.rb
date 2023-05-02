@@ -17,23 +17,52 @@ class Parser
   def advance  
     rl = @vmFile.readline
     rl.strip!
-    @chars = rl.split(//)
+    chars = rl.split(//)
+    @isEmpty = chars.empty?
+    @isComment = checkComment(chars)
+    parseCommand(chars)
     @parseState = S_COMMAND
     rl
+  end
+
+  def checkComment(chars)
+    c = chars.first(2)
+    return c == ["/", "/"]
+  end
+
+  
+  def parseCommand(chars)
+    @parseCommand = []
+    delimiter = " "
+    while c = chars.shift
+      if not ( isEmpty || isComment)
+        chars.unshift c
+        @parseCommand.push parseReadline(chars, delimiter) 
+      end
+    end
+  end
+  
+  def parseReadline(chars, delimiter)
+    field = ""
+    nextisEmpty = false
+    nextisComment = false
+    while c = chars.shift
+      if nextisComment
+        return field
+      elsif c == delimiter
+        return field
+      else
+        field.concat c
+      end
+      nextisComment = checkComment(chars)
+    end
+  return field
   end
   
   def commandType
     if @parseState == S_COMMAND 
-      field = ""
-      while c = @chars.shift
-        if c == " "
-          break
-        else
-          field.concat c
-        end
-      end
-      @command = field
       @parseState = S_ARG1
+      @command = @parseCommand[0]
     end
     case @command
       when "push" 
@@ -63,43 +92,26 @@ class Parser
         @parseState = S_ARG2
         return @command
       else
-        field = ""
-        while c = @chars.shift
-          if c == " "
-            break
-          else
-            field.concat c
-          end
-        end
         @parseState = S_ARG2
-        return field
+        return @parseCommand[1]
       end
     end
   end
 
   def arg2
     if @parseState == S_ARG2
-      field = ""
-      while c = @chars.shift
-        if c == " "
-          break
-        else
-          field.concat c
-        end
-      end
-      return field  
+      return @parseCommand[2]  
     end
   end
 
   def isEmpty
-    return @chars.empty?
+    return @isEmpty
   end
 
   def isComment
-    c = @chars.first(2)
-    return c == ["/", "/"]
+    return @isComment
   end
-    
+  
 end
 
 
