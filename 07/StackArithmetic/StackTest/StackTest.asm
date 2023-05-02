@@ -1,0 +1,484 @@
+//push constant 17
+    @17
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 17
+    @17
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//eq
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUEEQ0
+    D;JEQ
+(FALSEEQ0)
+    D=0
+    @ENDEQ0
+    0;JMP
+(TRUEEQ0)
+    D=-1
+    @ENDEQ0
+    0;JMP
+(ENDEQ0)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 17
+    @17
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 16
+    @16
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//eq
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUEEQ1
+    D;JEQ
+(FALSEEQ1)
+    D=0
+    @ENDEQ1
+    0;JMP
+(TRUEEQ1)
+    D=-1
+    @ENDEQ1
+    0;JMP
+(ENDEQ1)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 16
+    @16
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 17
+    @17
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//eq
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUEEQ2
+    D;JEQ
+(FALSEEQ2)
+    D=0
+    @ENDEQ2
+    0;JMP
+(TRUEEQ2)
+    D=-1
+    @ENDEQ2
+    0;JMP
+(ENDEQ2)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 892
+    @892
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 891
+    @891
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//lt
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUELT3
+    D;JLT
+(FALSELT3)
+    D=0
+    @ENDLT3
+    0;JMP
+(TRUELT3)
+    D=-1
+    @ENDLT3
+    0;JMP
+(ENDLT3)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 891
+    @891
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 892
+    @892
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//lt
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUELT4
+    D;JLT
+(FALSELT4)
+    D=0
+    @ENDLT4
+    0;JMP
+(TRUELT4)
+    D=-1
+    @ENDLT4
+    0;JMP
+(ENDLT4)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 891
+    @891
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 891
+    @891
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//lt
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUELT5
+    D;JLT
+(FALSELT5)
+    D=0
+    @ENDLT5
+    0;JMP
+(TRUELT5)
+    D=-1
+    @ENDLT5
+    0;JMP
+(ENDLT5)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 32767
+    @32767
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 32766
+    @32766
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//gt
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUEGT6
+    D;JGT
+(FALSEGT6)
+    D=0
+    @ENDGT6
+    0;JMP
+(TRUEGT6)
+    D=-1
+    @ENDGT6
+    0;JMP
+(ENDGT6)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 32766
+    @32766
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 32767
+    @32767
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//gt
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUEGT7
+    D;JGT
+(FALSEGT7)
+    D=0
+    @ENDGT7
+    0;JMP
+(TRUEGT7)
+    D=-1
+    @ENDGT7
+    0;JMP
+(ENDGT7)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 32766
+    @32766
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 32766
+    @32766
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//gt
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @TRUEGT8
+    D;JGT
+(FALSEGT8)
+    D=0
+    @ENDGT8
+    0;JMP
+(TRUEGT8)
+    D=-1
+    @ENDGT8
+    0;JMP
+(ENDGT8)
+    @SP
+    A=M
+    M=D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 57
+    @57
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 31
+    @31
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 53
+    @53
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//add
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=D+M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 112
+    @112
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//sub
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=M-D
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//neg
+    @SP
+    AM=M-1
+    D=-M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//and
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=D&M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//push constant 82
+    @82
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//or
+    @SP
+    AM=M-1
+    D=M
+    @SP
+    AM=M-1
+    D=D|M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+//not
+    @SP
+    AM=M-1
+    D=!M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
