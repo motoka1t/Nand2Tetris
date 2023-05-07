@@ -5,11 +5,12 @@ class CodeWriter
 
   def initialize(filename)
     @asmFile = File.open(filename, "w+");
+    @functionName = ""
   end
 
   def setFileName(filename)
     @currentFile = filename
-    @cnt = 0
+    @cnt1 = 0 # for eq lt gt
   end
 
   def writeDebugComment1(command)
@@ -29,8 +30,8 @@ class CodeWriter
     @asmFile.print Indent + commands + "\n"
   end
 
-  def writeLabel(labels)
-    @asmFile.print "("+ labels + ")" + "\n"
+  def writeLabel1(label1)
+    @asmFile.print "("+ label1 + ")" + "\n"
   end
   
   def popStack
@@ -49,19 +50,19 @@ class CodeWriter
   def falseBlock(command)
     case command
     when "eq"
-      writeLabel("FALSEEQ" + @cnt.to_s)
+      writeLabel( "FALSEEQ" + @cnt1.to_s)
       writeCommand("D=0")
-      writeCommand("@ENDEQ" + @cnt.to_s)
+      writeCommand("@" + @functionName + "$" + "ENDEQ" + @cnt1.to_s)
       writeCommand("0;JMP")
     when "gt"
-      writeLabel("FALSEGT" + @cnt.to_s)
+      writeLabel("FALSEGT" + @cnt1.to_s)
       writeCommand("D=0")
-      writeCommand("@ENDGT" + @cnt.to_s)
+      writeCommand("@" + @functionName + "$" + "ENDGT" + @cnt1.to_s)
       writeCommand("0;JMP")      
     when "lt"
-      writeLabel("FALSELT" + @cnt.to_s)
+      writeLabel("FALSELT" + @cnt1.to_s)
       writeCommand("D=0")
-      writeCommand("@ENDLT" + @cnt.to_s)      
+      writeCommand("@" + @functionName + "$" + "ENDLT" + @cnt1.to_s)      
       writeCommand("0;JMP")
     end
   end
@@ -69,19 +70,19 @@ class CodeWriter
   def trueBlock(command)
     case command
     when "eq"
-      writeLabel("TRUEEQ" + @cnt.to_s)
+      writeLabel("TRUEEQ" + @cnt1.to_s)
       writeCommand("D=-1")
-      writeCommand("@ENDEQ" + @cnt.to_s)
+      writeCommand("@" + @functionName + "$" + "ENDEQ" + @cnt1.to_s)
       writeCommand("0;JMP")
     when "gt"
-      writeLabel("TRUEGT" + @cnt.to_s)
+      writeLabel("TRUEGT" + @cnt1.to_s)
       writeCommand("D=-1")
-      writeCommand("@ENDGT" + @cnt.to_s)
+      writeCommand("@" + @functionName + "$" + "ENDGT" + @cnt1.to_s)
       writeCommand("0;JMP")      
     when "lt"
-      writeLabel("TRUELT" + @cnt.to_s)
+      writeLabel("TRUELT" + @cnt1.to_s)
       writeCommand("D=-1")
-      writeCommand("@ENDLT" + @cnt.to_s)      
+      writeCommand("@" + @functionName + "$" + "ENDLT" + @cnt1.to_s)      
       writeCommand("0;JMP")
     end
   end  
@@ -89,17 +90,17 @@ class CodeWriter
   def endBlock(command)
     case command
     when "eq"
-      writeLabel("ENDEQ" + @cnt.to_s)
+      writeLabel("ENDEQ" + @cnt1.to_s)
       writeCommand("@SP")
       writeCommand("A=M")
       writeCommand("M=D")
     when "gt"
-      writeLabel("ENDGT" + @cnt.to_s)
+      writeLabel("ENDGT" + @cnt1.to_s)
       writeCommand("@SP")
       writeCommand("A=M")
       writeCommand("M=D")
     when "lt"
-      writeLabel("ENDLT" + @cnt.to_s)
+      writeLabel("ENDLT" + @cnt1.to_s)
       writeCommand("@SP")
       writeCommand("A=M")
       writeCommand("M=D")
@@ -130,7 +131,7 @@ class CodeWriter
         writeCommand("D=M")
         popStack
         writeCommand("D=M-D")
-        writeCommand("@TRUEEQ" + @cnt.to_s)
+        writeCommand("@TRUEEQ" + @cnt1.to_s)
         writeCommand("D;JEQ")
         falseBlock("eq")
         trueBlock("eq")
@@ -141,7 +142,7 @@ class CodeWriter
         writeCommand("D=M")
         popStack
         writeCommand("D=M-D")
-        writeCommand("@TRUEGT" + @cnt.to_s)
+        writeCommand("@TRUEGT" + @cnt1.to_s)
         writeCommand("D;JGT")
         falseBlock("gt")
         trueBlock("gt")
@@ -152,7 +153,7 @@ class CodeWriter
         writeCommand("D=M")
         popStack
         writeCommand("D=M-D")
-        writeCommand("@TRUELT" + @cnt.to_s)
+        writeCommand("@TRUELT" + @cnt1.to_s)
         writeCommand("D;JLT")
         falseBlock("lt")
         trueBlock("lt")
@@ -175,7 +176,7 @@ class CodeWriter
         writeCommand("D=!M")
         pushStack
     end
-    @cnt = @cnt + 1
+    @cnt1 = @cnt1 + 1
   end
 
   def writePushPop(command, segment, index)
@@ -200,7 +201,7 @@ class CodeWriter
         writeCommand("@ARG")
         writeCommand("A=D+M")
         writeCommand("D=M")
-e        pushStack
+        pushStack
       when "this"
         writeCommand("@"+index)
         writeCommand("D=A")
@@ -244,11 +245,11 @@ e        pushStack
         writeCommand("D=A")
         writeCommand("@LCL")
         writeCommand("D=D+M")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("M=D")
         popStack
         writeCommand("D=M")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "argument"
@@ -256,11 +257,11 @@ e        pushStack
         writeCommand("D=A")
         writeCommand("@ARG")
         writeCommand("D=D+M")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("M=D")
         popStack
         writeCommand("D=M")        
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "this"
@@ -268,11 +269,11 @@ e        pushStack
         writeCommand("D=A")
         writeCommand("@THIS")
         writeCommand("D=D+M")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("M=D")
         popStack
         writeCommand("D=M")        
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "that"
@@ -280,11 +281,11 @@ e        pushStack
         writeCommand("D=A")
         writeCommand("@THAT")
         writeCommand("D=D+M")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("M=D")
         popStack
         writeCommand("D=M")        
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "pointer"
@@ -292,11 +293,11 @@ e        pushStack
         writeCommand("D=A")
         writeCommand("@3")
         writeCommand("D=D+A")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("M=D")
         popStack
         writeCommand("D=M")        
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "temp"
@@ -304,11 +305,11 @@ e        pushStack
         writeCommand("D=A")
         writeCommand("@5")
         writeCommand("D=D+A")
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("M=D")
         popStack
         writeCommand("D=M")        
-        writeCommand("@R13")
+        writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "static"
@@ -319,9 +320,166 @@ e        pushStack
       end
     end
   end
+
+  def writeInit
+    writeDebugComment1("Bootstrap code")
+    # SP=256
+    @functionName = ""
+    @cnt2 = 0
+    writeCommand("@256")
+    writeCommand("D=A")
+    writeCommand("@SP")
+    writeCommand("M=D")
+    # Call Sys.init
+    writeCall("Sys.init", "0")
+  end
+
+  def writeEnd
+#    writeLabel1("END")
+#    writeCommand("@END")
+#    writeCommand("0;JMP")
+  end
   
+  def writeLabel(label)
+    label1 = @functionName + "$" + label
+    @asmFile.print "("+ label1 + ")" + "\n"
+  end
+  
+  def writeGoto(label)
+    label1 = @functionName + "$" + label
+    writeCommand("@" + label1)
+    writeCommand("0;JMP")
+  end
+
+  def writeIf(label)
+    label1 = @functionName + "$" + label    
+    popStack
+    writeCommand("D=M")
+    writeCommand("@" + label1)
+    writeCommand("D;JNE")
+  end
+
+  def writeCall(functionName, numArgs)
+    writeDebugComment1("call " + functionName + " " + numArgs )
+    @cnt2 = @cnt2 + 1
+    # push return-address
+    writeCommand("@return-address"+ "$" + functionName + @cnt2.to_s )
+    writeCommand("D=A")
+    pushStack
+    # push LCL
+    writeCommand("@LCL")
+    writeCommand("D=M")
+    pushStack
+    # push ARG
+    writeCommand("@ARG")
+    writeCommand("D=M")
+    pushStack
+    # push THIS
+    writeCommand("@THIS")
+    writeCommand("D=M")
+    pushStack
+    # push THAT
+    writeCommand("@THAT")
+    writeCommand("D=M")
+    pushStack
+    #ARG=SP-n-5
+    writeCommand("@SP")
+    writeCommand("D=M")
+    writeCommand("@"+numArgs)
+    writeCommand("D=D-A")
+    writeCommand("@5")
+    writeCommand("D=D-A")
+    writeCommand("@ARG")
+    writeCommand("M=D")
+    #LCL=SP
+    writeCommand("@SP")
+    writeCommand("D=M")
+    writeCommand("@LCL")
+    writeCommand("M=D")
+    #goto f 
+    writeCommand("@" + functionName)
+    writeCommand("0;JMP")
+    #(return-address)
+    writeLabel1("return-address" + "$" + functionName + @cnt2.to_s)
+  end
+
+  def writeFunction(functionName, numLocals)
+    writeLabel1(functionName)
+    @functionName = functionName
+    # repete k times
+    i = 0
+    k = numLocals.to_i
+    while (i < k)
+      # push 0
+      writeCommand("@0")
+      writeCommand("D=A")
+      pushStack
+      i = i + 1
+    end
+  end
+
+  def writeReturn
+    #FRAME:R13 RET:R14
+    #FRAME=LCL
+    writeCommand("@LCL")
+    writeCommand("D=M")
+    writeCommand("@R13")
+    writeCommand("M=D")
+    #RET=*(FRAME-5)
+    writeCommand("@5")
+    writeCommand("D=A")
+    writeCommand("@R13")
+    writeCommand("A=M-D")
+    writeCommand("D=M")
+    writeCommand("@R14")
+    writeCommand("M=D")
+    #*ARG=pop()
+    popStack
+    writeCommand("D=M")
+    writeCommand("@ARG")
+    writeCommand("A=M")
+    writeCommand("M=D")
+    #SP=ARG+1
+    writeCommand("@ARG")
+    writeCommand("D=M+1")
+    writeCommand("@SP")
+    writeCommand("M=D")
+    #THAT=*(FRAME-1)
+    writeCommand("@R13")
+    writeCommand("AM=M-1")
+    writeCommand("D=M")
+    writeCommand("@THAT")
+    writeCommand("M=D")
+    #THIS=*(FRAME-2)
+    writeCommand("@R13")
+    writeCommand("AM=M-1")
+    writeCommand("D=M")
+    writeCommand("@THIS")
+    writeCommand("M=D")
+    #ARG=*(FRAME-3)
+    writeCommand("@R13")
+    writeCommand("AM=M-1")
+    writeCommand("D=M")
+    writeCommand("@ARG")
+    writeCommand("M=D")
+    #LCL=*(FRAME-4)
+    writeCommand("@R13")
+    writeCommand("AM=M-1")
+    writeCommand("D=M")
+    writeCommand("@LCL")
+    writeCommand("M=D")
+    #goto RET
+    writeCommand("@R14")
+    writeCommand("A=M")
+    writeCommand("0;JMP")
+  end
+    
   def close
     @asmFile.close
+  end
+
+  def functionName
+    return @functionName
   end
 
 end

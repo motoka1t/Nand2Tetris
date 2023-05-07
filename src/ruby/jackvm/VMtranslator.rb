@@ -3,7 +3,7 @@ require_relative "./Common.rb"
 require_relative "./Parser.rb"
 require_relative "./CodeWriter.rb"
 
-
+# vm code to asm code 
 def translate(asmCodeWriter, vmParser, vmFilename)
   asmCodeWriter.setFileName(vmFilename)
   while vmParser.hasMoreCommands
@@ -55,14 +55,20 @@ if File.directory?(vmFile)
   vmFiles = Dir.glob("*.vm")
   asmFilename = File.basename(vmFile) + ".asm"
   asmCodeWriter = CodeWriter.new(asmFilename)
+  # bootstrap code 
+  asmCodeWriter.writeInit
   for vmFilename in vmFiles
     vmParser = Parser.new(vmFilename)
     translate(asmCodeWriter, vmParser, vmFilename)
   end
+  # end code
+  asmCodeWriter.writeEnd
 else
   vmFilename = vmFile
   asmFileName = vmFilename.gsub(/vm/, "asm")
   asmCodeWriter = CodeWriter.new(asmFilename)
   vmParser = Parser.new(vmFilename)
+  asmCodeWriter.writeInit
   translate(asmCodeWriter, vmParser, vmFilename)
+  asmCodeWrite.writeEnd
 end
