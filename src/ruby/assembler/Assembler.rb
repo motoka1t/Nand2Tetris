@@ -24,11 +24,7 @@ def firstPass(filename, asmSymbolTable)
   n = 0
   while asmParse.hasMoreCommands
     command = asmParse.advance
-    if asmParse.isEmpty
-      next
-    elsif asmParse.isComment
-      next
-    elsif asmParse.commandType == L_COMMAND
+    if asmParse.commandType == L_COMMAND
       symbol = asmParse.symbol
       asmSymbolTable.addEntry(symbol, n) 
     else
@@ -45,11 +41,7 @@ def secondPass(filename, asmSymbolTable)
   n = 16
   while asmParse.hasMoreCommands
     command = asmParse.advance
-    if asmParse.isEmpty
-      next
-    elsif asmParse.isComment
-      next
-    elsif asmParse.commandType == A_COMMAND
+    if asmParse.commandType == A_COMMAND
       symbol = asmParse.symbol
       if symbol =~ /[a-zA-Z]/
         if asmSymbolTable.contains(symbol)
@@ -60,23 +52,17 @@ def secondPass(filename, asmSymbolTable)
           n = n + 1
         end
       end
-      field = '0' + format("%015b\n", symbol.to_i) 
+      field = '0' + format("%015b\n", symbol.to_i)
+      hackOut.print field
     elsif asmParse.commandType == C_COMMAND
       dest = asmParse.dest
       comp = asmParse.comp
       jump = asmParse.jump
-      field = "111"
-      field = field + asmCode.comp(comp)
-      field = field + asmCode.dest(dest)
-      field = field + asmCode.jump(jump)
-      field = field + "\n"
-    else
-      next
+      field = "111" + asmCode.comp(comp) + asmCode.dest(dest) + asmCode.jump(jump) + "\n"
+      hackOut.print field
     end
-    hackOut.print field
   end
 end
-
 
 # Main
 filename = ARGV.first

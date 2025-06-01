@@ -11,11 +11,22 @@ class Parser
     return !@asmFile.eof?
   end
     
-  def advance  
-    command = @asmFile.readline
-    command.strip!
-    @chars = command.split(//)
-    command
+  def advance
+    while !@asmFile.eof? 
+      line = @asmFile.readline
+      line.strip!
+      if line =~ /^\/\//
+        next
+      elsif line.empty?
+        next
+      else
+        command = line.split('//')
+        @command = command[0]
+        @command.strip!
+        @chars = @command.split(//)
+        return @command
+      end
+    end
   end
 
   def commandType
@@ -53,62 +64,37 @@ class Parser
         return field
       elsif c == " "
         next
-      elsif isComment
-        #undo
-        @chars = field.split(//)
-        field = ""
-        return field
       else
         field.concat c
       end
     end
-    #undo
-    @chars = field.split(//)
-    field = ""
-    return field
   end
 
   def comp
-    field = ""
-    while c = @chars.shift
-      if c == ";"
-        return field
-      elsif isComment
-        @chars = []
-        return field
-      elsif c == " "
-        next
-      else
-        field.concat c
-      end
-    end
-    return field
+    # field = ""
+    # while c = @chars.shift
+    #   if c == ";"
+    #     return field
+    #   elsif c == " "
+    #     next
+    #   else
+    #     field.concat c
+    #   end
+    # end
+    # return field
   end
 
   def jump
-    field = ""
-    while c = @chars.shift
-      if c == " "
-        next
-      elsif isComment
-        field.concat c
-        return field
-      else
-        field.concat c
-      end
-    end
-    return field
-  end
-
-  def isEmpty
-    return @chars.empty?
-  end
-
-  def isComment
-    c = @chars.first(2)
-    return c == ["/", "/"]
-  end
-    
+    # field = ""
+    # while c = @chars.shift
+    #   if c == " "
+    #     next
+    #   else
+    #     field.concat c
+    #   end
+    # end
+    # return field
+  end    
 end
 
 
