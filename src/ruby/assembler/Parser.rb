@@ -71,29 +71,29 @@ class Parser
   end
 
   def comp
-    # field = ""
-    # while c = @chars.shift
-    #   if c == ";"
-    #     return field
-    #   elsif c == " "
-    #     next
-    #   else
-    #     field.concat c
-    #   end
-    # end
-    # return field
+    field = ""
+    while c = @chars.shift
+      if c == ";"
+        return field
+      elsif c == " "
+        next
+      else
+        field.concat c
+      end
+    end
+    return field
   end
 
   def jump
-    # field = ""
-    # while c = @chars.shift
-    #   if c == " "
-    #     next
-    #   else
-    #     field.concat c
-    #   end
-    # end
-    # return field
+    field = ""
+    while c = @chars.shift
+      if c == " "
+        next
+      else
+        field.concat c
+      end
+    end
+    return field
   end    
 end
 

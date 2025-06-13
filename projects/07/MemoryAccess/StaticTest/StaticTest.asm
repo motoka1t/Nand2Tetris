@@ -26,17 +26,20 @@
     @SP
     AM=M-1
     D=M
+    D=M
     @StaticTest.vm.8
     M=D
 //pop static 3
     @SP
     AM=M-1
     D=M
+    D=M
     @StaticTest.vm.3
     M=D
 //pop static 1
     @SP
     AM=M-1
+    D=M
     D=M
     @StaticTest.vm.1
     M=D

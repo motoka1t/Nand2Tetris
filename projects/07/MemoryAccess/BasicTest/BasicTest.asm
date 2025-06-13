@@ -11,12 +11,12 @@
     D=A
     @LCL
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 21
@@ -40,12 +40,12 @@
     D=A
     @ARG
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //pop argument 1
@@ -53,12 +53,12 @@
     D=A
     @ARG
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 36
@@ -74,12 +74,12 @@
     D=A
     @THIS
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 42
@@ -103,12 +103,12 @@
     D=A
     @THAT
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //pop that 2
@@ -116,12 +116,12 @@
     D=A
     @THAT
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 510
@@ -137,12 +137,12 @@
     D=A
     @5
     D=D+A
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push local 0

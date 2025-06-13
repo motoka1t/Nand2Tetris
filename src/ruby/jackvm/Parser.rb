@@ -14,49 +14,42 @@ class Parser
     return !@vmFile.eof?
   end
     
-  def advance  
-    rl = @vmFile.readline
-    rl.strip!
-    chars = rl.split(//)
-    @isEmpty = chars.empty?
-    @isComment = checkComment(chars)
-    parseCommand(chars)
-    @parseState = S_COMMAND
-    rl
-  end
-
-  def checkComment(chars)
-    c = chars.first(2)
-    return c == ["/", "/"]
-  end
-
-  
-  def parseCommand(chars)
-    @parseCommand = []
-    delimiter = " "
-    while c = chars.shift
-      if not ( isEmpty || isComment)
-        chars.unshift c
-        @parseCommand.push parseReadline(chars, delimiter) 
+  def advance
+    while !@vmFile.eof?
+      line = @vmFile.readline
+      line.strip!
+      if line =~ /^\/\//
+        next
+      elsif line.empty?
+        next
+      else
+        @chars = line.split(//)
+        parseReadline(@chars)
+        @parseState = S_COMMAND
+        return line
       end
     end
   end
-  
-  def parseReadline(chars, delimiter)
-    field = ""
-    nextisEmpty = false
-    nextisComment = false
+
+  def parseReadline(chars)
+    @parseCommand = []
+    delimiter = " "
     while c = chars.shift
-      if nextisComment
-        return field
-      elsif c == delimiter
+      chars.unshift c
+      @parseCommand.push parseCommand(chars, delimiter) 
+    end
+  end
+  
+  def parseCommand(chars, delimiter)
+    field = ""
+    while c = chars.shift
+      if c == delimiter
         return field
       else
         field.concat c
       end
-      nextisComment = checkComment(chars)
     end
-  return field
+    return field
   end
   
   def commandType
@@ -102,14 +95,6 @@ class Parser
     if @parseState == S_ARG2
       return @parseCommand[2]  
     end
-  end
-
-  def isEmpty
-    return @isEmpty
-  end
-
-  def isComment
-    return @isComment
   end
   
 end

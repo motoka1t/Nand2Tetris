@@ -35,144 +35,103 @@ class CodeWriter
   end
   
   def popStack
+    # sp = sp - 1;
+    writeCommand("@SP")
+    writeCommand("AM=M-1")
+    # return stack[sp]
+    writeCommand("D=M")
+  end
+
+  def popStack1
+    # sp = sp - 1;
     writeCommand("@SP")
     writeCommand("AM=M-1")
   end
 
   def pushStack
+    # stack[sp] = x;
     writeCommand("@SP")
     writeCommand("A=M")
     writeCommand("M=D")
+    # sp = sp + 1;
     writeCommand("@SP")
     writeCommand("M=M+1")
-  end
-
-  def falseBlock(command)
-    case command
-    when "eq"
-      writeLabel( "FALSEEQ" + @cnt1.to_s)
-      writeCommand("D=0")
-      writeCommand("@" + @functionName + "$" + "ENDEQ" + @cnt1.to_s)
-      writeCommand("0;JMP")
-    when "gt"
-      writeLabel("FALSEGT" + @cnt1.to_s)
-      writeCommand("D=0")
-      writeCommand("@" + @functionName + "$" + "ENDGT" + @cnt1.to_s)
-      writeCommand("0;JMP")      
-    when "lt"
-      writeLabel("FALSELT" + @cnt1.to_s)
-      writeCommand("D=0")
-      writeCommand("@" + @functionName + "$" + "ENDLT" + @cnt1.to_s)      
-      writeCommand("0;JMP")
-    end
-  end
-
-  def trueBlock(command)
-    case command
-    when "eq"
-      writeLabel("TRUEEQ" + @cnt1.to_s)
-      writeCommand("D=-1")
-      writeCommand("@" + @functionName + "$" + "ENDEQ" + @cnt1.to_s)
-      writeCommand("0;JMP")
-    when "gt"
-      writeLabel("TRUEGT" + @cnt1.to_s)
-      writeCommand("D=-1")
-      writeCommand("@" + @functionName + "$" + "ENDGT" + @cnt1.to_s)
-      writeCommand("0;JMP")      
-    when "lt"
-      writeLabel("TRUELT" + @cnt1.to_s)
-      writeCommand("D=-1")
-      writeCommand("@" + @functionName + "$" + "ENDLT" + @cnt1.to_s)      
-      writeCommand("0;JMP")
-    end
-  end  
-
-  def endBlock(command)
-    case command
-    when "eq"
-      writeLabel("ENDEQ" + @cnt1.to_s)
-      writeCommand("@SP")
-      writeCommand("A=M")
-      writeCommand("M=D")
-    when "gt"
-      writeLabel("ENDGT" + @cnt1.to_s)
-      writeCommand("@SP")
-      writeCommand("A=M")
-      writeCommand("M=D")
-    when "lt"
-      writeLabel("ENDLT" + @cnt1.to_s)
-      writeCommand("@SP")
-      writeCommand("A=M")
-      writeCommand("M=D")
-    end
-  end  
+  end 
   
   def writeArithmetric(command)
     writeDebugComment1(command)
     case command
     when "add"
         popStack
-        writeCommand("D=M")
-        popStack
+        popStack1
+        # stack[sp] = stack[sp] + value
         writeCommand("D=D+M")
         pushStack
     when "sub"
         popStack
-        writeCommand("D=M")
-        popStack
+        popStack1    
+        # stack[sp] = stack[sp] - value
         writeCommand("D=M-D")
         pushStack
     when "neg"
-        popStack
+        popStack1    
+        # stack[sp] = -stack[sp]
         writeCommand("D=-M")
         pushStack
     when "eq"
         popStack
-        writeCommand("D=M")
-        popStack
-        writeCommand("D=M-D")
-        writeCommand("@TRUEEQ" + @cnt1.to_s)
+        popStack1
+        writeCommand("D=M-D")        
+        writeCommand("@TRUEEQ" + @cnt1.to_s)    
         writeCommand("D;JEQ")
-        falseBlock("eq")
-        trueBlock("eq")
-        endBlock("eq")
-        pushStack
+        writeCommand("D=0") 
+        writeCommand("@ENDEQ" + @cnt1.to_s)
+        writeCommand("0;JMP") 
+        writeCommand("(TRUEEQ"+ @cnt1.to_s + ")")
+        writeCommand("D=-1")
+        writeCommand("(ENDEQ"+ @cnt1.to_s + ")")               
+        pushStack   
     when "gt"
         popStack
-        writeCommand("D=M")
-        popStack
+        popStack1
         writeCommand("D=M-D")
-        writeCommand("@TRUEGT" + @cnt1.to_s)
+        writeCommand("@TRUEGT" + @cnt1.to_s)    
         writeCommand("D;JGT")
-        falseBlock("gt")
-        trueBlock("gt")
-        endBlock("gt")
+        writeCommand("D=0") 
+        writeCommand("@ENDGT" + @cnt1.to_s)
+        writeCommand("0;JMP") 
+        writeCommand("(TRUEGT"+ @cnt1.to_s + ")")
+        writeCommand("D=-1")
+        writeCommand("(ENDGT"+ @cnt1.to_s + ")")  
         pushStack
     when "lt"
         popStack
-        writeCommand("D=M")
-        popStack
+        popStack1
         writeCommand("D=M-D")
-        writeCommand("@TRUELT" + @cnt1.to_s)
+        writeCommand("@TRUELT" + @cnt1.to_s) 
         writeCommand("D;JLT")
-        falseBlock("lt")
-        trueBlock("lt")
-        endBlock("lt")
+        writeCommand("D=0") 
+        writeCommand("@ENDLT" + @cnt1.to_s)
+        writeCommand("0;JMP") 
+        writeCommand("(TRUELT"+ @cnt1.to_s + ")")
+        writeCommand("D=-1")
+        writeCommand("(ENDLT"+ @cnt1.to_s + ")")  
         pushStack
     when "and"
         popStack
-        writeCommand("D=M")
-        popStack
+        popStack1
+        # stack[sp] = stack[sp] - value
         writeCommand("D=D&M")
         pushStack
     when "or"
         popStack
-        writeCommand("D=M")
-        popStack
+        popStack1
+        # stack[sp] = stack[sp] - value
         writeCommand("D=D|M")
         pushStack
     when "not"
-        popStack
+        popStack1
+        # stack[sp] = stack[sp] - value        
         writeCommand("D=!M")
         pushStack
     end
@@ -248,7 +207,6 @@ class CodeWriter
         writeCommand("@R15")
         writeCommand("M=D")
         popStack
-        writeCommand("D=M")
         writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
@@ -259,8 +217,7 @@ class CodeWriter
         writeCommand("D=D+M")
         writeCommand("@R15")
         writeCommand("M=D")
-        popStack
-        writeCommand("D=M")        
+        popStack      
         writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
@@ -271,8 +228,7 @@ class CodeWriter
         writeCommand("D=D+M")
         writeCommand("@R15")
         writeCommand("M=D")
-        popStack
-        writeCommand("D=M")        
+        popStack       
         writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
@@ -283,8 +239,7 @@ class CodeWriter
         writeCommand("D=D+M")
         writeCommand("@R15")
         writeCommand("M=D")
-        popStack
-        writeCommand("D=M")        
+        popStack      
         writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
@@ -295,8 +250,7 @@ class CodeWriter
         writeCommand("D=D+A")
         writeCommand("@R15")
         writeCommand("M=D")
-        popStack
-        writeCommand("D=M")        
+        popStack      
         writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
@@ -307,14 +261,12 @@ class CodeWriter
         writeCommand("D=D+A")
         writeCommand("@R15")
         writeCommand("M=D")
-        popStack
-        writeCommand("D=M")        
+        popStack      
         writeCommand("@R15")
         writeCommand("A=M")         
         writeCommand("M=D")
       when "static"
         popStack
-        writeCommand("D=M")
         writeCommand("@" + @currentFile +"."+index)
         writeCommand("M=D")
       end
@@ -335,9 +287,9 @@ class CodeWriter
   end
 
   def writeEnd
-#    writeLabel1("END")
-#    writeCommand("@END")
-#    writeCommand("0;JMP")
+    writeLabel1("END")
+    writeCommand("@END")
+    writeCommand("0;JMP")
   end
   
   def writeLabel(label)
@@ -354,7 +306,6 @@ class CodeWriter
   def writeIf(label)
     label1 = @functionName + "$" + label    
     popStack
-    writeCommand("D=M")
     writeCommand("@" + label1)
     writeCommand("D;JNE")
   end
@@ -404,6 +355,8 @@ class CodeWriter
   end
 
   def writeFunction(functionName, numLocals)
+    writeDebugComment1("function" + functionName)
+
     writeLabel1(functionName)
     @functionName = functionName
     # repete k times
@@ -419,6 +372,7 @@ class CodeWriter
   end
 
   def writeReturn
+    writeDebugComment1("return" + @functionName)
     #FRAME:R13 RET:R14
     #FRAME=LCL
     writeCommand("@LCL")
@@ -435,7 +389,6 @@ class CodeWriter
     writeCommand("M=D")
     #*ARG=pop()
     popStack
-    writeCommand("D=M")
     writeCommand("@ARG")
     writeCommand("A=M")
     writeCommand("M=D")

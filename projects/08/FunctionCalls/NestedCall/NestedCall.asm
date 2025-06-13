@@ -1,7 +1,63 @@
 //Bootstrap code
+    @256
+    D=A
+    @SP
+    M=D
+//call Sys.init 0
+    @return-address$Sys.init1
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+    @LCL
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+    @ARG
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+    @THIS
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+    @THAT
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+    @SP
+    D=M
+    @0
+    D=D-A
+    @5
+    D=D-A
+    @ARG
+    M=D
+    @SP
+    D=M
+    @LCL
+    M=D
+    @Sys.init
+    0;JMP
+(return-address$Sys.init1)
+//functionSys.init
 (Sys.init)
-//push constant 4000	
-    @4000	
+//push constant 4000	//
+    @4000	//
     D=A
     @SP
     A=M
@@ -43,7 +99,7 @@
     A=M
     M=D
 //call Sys.main 0
-    @return-address$Sys.main1
+    @return-address$Sys.main2
     D=A
     @SP
     A=M
@@ -92,7 +148,7 @@
     M=D
     @Sys.main
     0;JMP
-(return-address$Sys.main1)
+(return-address$Sys.main2)
 //pop temp 1
     @1
     D=A
@@ -109,6 +165,7 @@
 (Sys.init$LOOP)
     @Sys.init$LOOP
     0;JMP
+//functionSys.main
 (Sys.main)
     @0
     D=A
@@ -259,7 +316,7 @@
     @SP
     M=M+1
 //call Sys.add12 1
-    @return-address$Sys.add122
+    @return-address$Sys.add123
     D=A
     @SP
     A=M
@@ -308,7 +365,7 @@
     M=D
     @Sys.add12
     0;JMP
-(return-address$Sys.add122)
+(return-address$Sys.add123)
 //pop temp 0
     @0
     D=A
@@ -425,6 +482,7 @@
     M=D
     @SP
     M=M+1
+//returnSys.main
     @LCL
     D=M
     @R13
@@ -469,6 +527,7 @@
     @R14
     A=M
     0;JMP
+//functionSys.add12
 (Sys.add12)
 //push constant 4002
     @4002
@@ -543,6 +602,7 @@
     M=D
     @SP
     M=M+1
+//returnSys.add12
     @LCL
     D=M
     @R13

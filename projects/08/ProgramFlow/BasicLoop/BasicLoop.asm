@@ -1,8 +1,3 @@
-//Bootstrap code
-    @256
-    D=A
-    @SP
-    M=D
 //push constant 0
     @0
     D=A
@@ -24,7 +19,7 @@
     @R15
     A=M
     M=D
-(LOOP_START)
+($LOOP_START)
 //push argument 0
     @0
     D=A
@@ -130,7 +125,7 @@
     @SP
     AM=M-1
     D=M
-    @LOOP_START
+    @$LOOP_START
     D;JNE
 //push local 0
     @0
@@ -143,6 +138,3 @@
     M=D
     @SP
     M=M+1
-(END)
-    @END
-    0;JMP

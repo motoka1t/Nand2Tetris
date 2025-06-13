@@ -23,18 +23,12 @@
     D=M-D
     @TRUEEQ0
     D;JEQ
-(FALSEEQ0)
     D=0
     @ENDEQ0
     0;JMP
-(TRUEEQ0)
+    (TRUEEQ0)
     D=-1
-    @ENDEQ0
-    0;JMP
-(ENDEQ0)
-    @SP
-    A=M
-    M=D
+    (ENDEQ0)
     @SP
     A=M
     M=D
@@ -65,18 +59,12 @@
     D=M-D
     @TRUEEQ1
     D;JEQ
-(FALSEEQ1)
     D=0
     @ENDEQ1
     0;JMP
-(TRUEEQ1)
+    (TRUEEQ1)
     D=-1
-    @ENDEQ1
-    0;JMP
-(ENDEQ1)
-    @SP
-    A=M
-    M=D
+    (ENDEQ1)
     @SP
     A=M
     M=D
@@ -107,18 +95,12 @@
     D=M-D
     @TRUEEQ2
     D;JEQ
-(FALSEEQ2)
     D=0
     @ENDEQ2
     0;JMP
-(TRUEEQ2)
+    (TRUEEQ2)
     D=-1
-    @ENDEQ2
-    0;JMP
-(ENDEQ2)
-    @SP
-    A=M
-    M=D
+    (ENDEQ2)
     @SP
     A=M
     M=D
@@ -149,18 +131,12 @@
     D=M-D
     @TRUELT3
     D;JLT
-(FALSELT3)
     D=0
     @ENDLT3
     0;JMP
-(TRUELT3)
+    (TRUELT3)
     D=-1
-    @ENDLT3
-    0;JMP
-(ENDLT3)
-    @SP
-    A=M
-    M=D
+    (ENDLT3)
     @SP
     A=M
     M=D
@@ -191,18 +167,12 @@
     D=M-D
     @TRUELT4
     D;JLT
-(FALSELT4)
     D=0
     @ENDLT4
     0;JMP
-(TRUELT4)
+    (TRUELT4)
     D=-1
-    @ENDLT4
-    0;JMP
-(ENDLT4)
-    @SP
-    A=M
-    M=D
+    (ENDLT4)
     @SP
     A=M
     M=D
@@ -233,18 +203,12 @@
     D=M-D
     @TRUELT5
     D;JLT
-(FALSELT5)
     D=0
     @ENDLT5
     0;JMP
-(TRUELT5)
+    (TRUELT5)
     D=-1
-    @ENDLT5
-    0;JMP
-(ENDLT5)
-    @SP
-    A=M
-    M=D
+    (ENDLT5)
     @SP
     A=M
     M=D
@@ -275,18 +239,12 @@
     D=M-D
     @TRUEGT6
     D;JGT
-(FALSEGT6)
     D=0
     @ENDGT6
     0;JMP
-(TRUEGT6)
+    (TRUEGT6)
     D=-1
-    @ENDGT6
-    0;JMP
-(ENDGT6)
-    @SP
-    A=M
-    M=D
+    (ENDGT6)
     @SP
     A=M
     M=D
@@ -317,18 +275,12 @@
     D=M-D
     @TRUEGT7
     D;JGT
-(FALSEGT7)
     D=0
     @ENDGT7
     0;JMP
-(TRUEGT7)
+    (TRUEGT7)
     D=-1
-    @ENDGT7
-    0;JMP
-(ENDGT7)
-    @SP
-    A=M
-    M=D
+    (ENDGT7)
     @SP
     A=M
     M=D
@@ -359,18 +311,12 @@
     D=M-D
     @TRUEGT8
     D;JGT
-(FALSEGT8)
     D=0
     @ENDGT8
     0;JMP
-(TRUEGT8)
+    (TRUEGT8)
     D=-1
-    @ENDGT8
-    0;JMP
-(ENDGT8)
-    @SP
-    A=M
-    M=D
+    (ENDGT8)
     @SP
     A=M
     M=D

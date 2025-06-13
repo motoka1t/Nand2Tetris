@@ -1,3 +1,4 @@
+//functionSimpleFunction.test
 (SimpleFunction.test)
     @0
     D=A
@@ -102,6 +103,7 @@
     M=D
     @SP
     M=M+1
+//returnSimpleFunction.test
     @LCL
     D=M
     @R13
@@ -109,7 +111,8 @@
     @5
     D=A
     @R13
-    D=M-D
+    A=M-D
+    D=M
     @R14
     M=D
     @SP
@@ -144,7 +147,4 @@
     M=D
     @R14
     A=M
-    0;JMP
-(END)
-    @END
     0;JMP

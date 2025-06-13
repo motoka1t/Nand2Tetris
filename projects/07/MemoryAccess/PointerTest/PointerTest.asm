@@ -11,12 +11,12 @@
     D=A
     @3
     D=D+A
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 3040
@@ -32,12 +32,12 @@
     D=A
     @3
     D=D+A
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 32
@@ -53,12 +53,12 @@
     D=A
     @THIS
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push constant 46
@@ -74,12 +74,12 @@
     D=A
     @THAT
     D=D+M
-    @R13
+    @R15
     M=D
     @SP
     AM=M-1
     D=M
-    @R13
+    @R15
     A=M
     M=D
 //push pointer 0
