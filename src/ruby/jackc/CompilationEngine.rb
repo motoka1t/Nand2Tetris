@@ -239,7 +239,7 @@ class CompilationEngine
       if state === ST_PARAMETER_LIST_TYPE
         keywords = ["INT", "CHAR", "BOOLEAN"]
         if checkKeyword(@token, keywords)
-          xmlWriteTerminal("keyword", @token.keyWord)
+          xmlWriteTerminal("keyword", @token.keyWord.downcase)
           state = ST_PARAMETER_LIST_NAME
           @token = @tokens.shift()
         else
@@ -352,7 +352,7 @@ class CompilationEngine
       keywords = ["DO"]
       if checkKeyword(@token, keywords)  
         xmlWriteNonTerminal("doStatement", "begin")
-        xmlWriteTerminal("keyword", @token.keyWord)
+        xmlWriteTerminal("keyword", @token.keyWord.downcase)
         state = ST_DO_SUBROUTINE_NAME
         @token = @tokens.shift()
       end
@@ -427,7 +427,7 @@ class CompilationEngine
       keywords = ["LET"]
       if checkKeyword(@token, keywords)
         xmlWriteNonTerminal("letStatement", "begin")
-        xmlWriteTerminal("keyword", @token.keyWord)
+        xmlWriteTerminal("keyword", @token.keyWord.downcase)
         state = ST_LET_VARNAME
         @token = @tokens.shift()
       end
@@ -568,7 +568,7 @@ class CompilationEngine
       if checkKeyword(@token, keywords)
         state = ST_RETURN_VALUE
         xmlWriteNonTerminal("returnStatement", "begin")  
-        xmlWriteTerminal("keyword", @token.keyWord) 
+        xmlWriteTerminal("keyword", @token.keyWord.downcase) 
         @token = @tokens.shift()
       end
     end
@@ -656,7 +656,7 @@ class CompilationEngine
       keywords = ["ELSE"]
       if checkKeyword(@token, keywords)
         state = ST_ELSE_BEGIN_BODY
-        xmlWriteTerminal("keyword", @token.keyWord)
+        xmlWriteTerminal("keyword", @token.keyWord.downcase)
         @token = @tokens.shift()              
       end    
     end        
@@ -693,9 +693,17 @@ class CompilationEngine
   def compileExpression()
     state = ST_EXPRESSION_TERM
     result = false
-    xmlWriteNonTerminal("expression", "begin")
+    hasExpression = false
     while (@tokens.length > 0)
       if state === ST_EXPRESSION_TERM
+        symbols = [")", ";"]
+        if checkSymbol(@token, symbols)
+          break
+        end
+        if not hasExpression
+          xmlWriteNonTerminal("expression", "begin")
+          hasExpression = true
+        end
         if compileTerm()
           state = ST_EXPRESSION_NEXT
           result = true
@@ -715,34 +723,30 @@ class CompilationEngine
         end
       end
     end
-    xmlWriteNonTerminal("expression", "end")       
+    if hasExpression
+      xmlWriteNonTerminal("expression", "end") 
+    end 
     return result
   end
 
   def compileTerm()
     state = ST_TERM_FIRST_STEP
     result = false
-    
+    xmlWriteNonTerminal("term", "begin")
     if state === ST_TERM_FIRST_STEP
       case @token.tokenType
       when TK_INT_CONST
-        xmlWriteNonTerminal("term", "begin")
         xmlWriteTerminal("integerConstant", @token.intVal.to_s)
-        xmlWriteNonTerminal("term", "end") 
         @token = @tokens.shift()
         result = true
       when TK_STRING_CONST
-        xmlWriteNonTerminal("term", "begin")
         xmlWriteTerminal("stringConstant", @token.stringVal)
-        xmlWriteNonTerminal("term", "end") 
         @token = @tokens.shift()
         result = true
       when TK_KEYWORD
         keywords = ["TRUE", "FALSE", "NULL", "THIS"]
         if checkKeyword(@token, keywords)
-          xmlWriteNonTerminal("term", "begin")
-          xmlWriteTerminal("keyword", @token.keyWord)
-          xmlWriteNonTerminal("term", "end")  
+          xmlWriteTerminal("keyword", @token.keyWord.downcase) 
           @token = @tokens.shift()
           result = true
         end
@@ -753,36 +757,29 @@ class CompilationEngine
         symbols2 = ["{"]
         symbols3 = ["."]
         if checkSymbol(nexttoken, symbols1)
-          xmlWriteNonTerminal("term", "begin")
           xmlWriteTerminal("identifier", @token.identifier)  
           state = ST_TERM_BEGIN_ARRAY
           @token = @tokens.shift()
         elsif checkSymbol(nexttoken, symbols2)
-          xmlWriteNonTerminal("term", "begin")
           xmlWriteTerminal("identifier", @token.identifier)           
           state = ST_TERM_SUBROUTINE_BEGIN_BODY
           @token = @tokens.shift()
         elsif checkSymbol(nexttoken, symbols3)
-          xmlWriteNonTerminal("term", "begin")
           xmlWriteTerminal("identifier", @token.identifier)            
           state = ST_TERM_SUBROUTINE_NAME_NEXT
           @token = @tokens.shift()
         else 
-          xmlWriteNonTerminal("term", "begin")
           xmlWriteTerminal("identifier", @token.identifier)
-          xmlWriteNonTerminal("term", "end") 
           @token = @tokens.shift()
           result = true
         end
       when TK_SYMBOL
         print @token
         if (@token.symbol === "(")
-          xmlWriteNonTerminal("term", "begin")
           xmlWriteTerminal("symbol", @token.symbol) 
           state = ST_TERM_EXPRESSION
           @token = @tokens.shift()
         elsif ((@token.symbol === "-") or (@token.symbol === "~"))
-          xmlWriteNonTerminal("term", "begin")
           xmlWriteTerminal("symbol", @token.symbol) 
           state = ST_TERM_UNARY_OPERATOR
           @token = @tokens.shift()
@@ -808,7 +805,6 @@ class CompilationEngine
       symbols = ["]"]
       if checkSymbol(@token, symbols)
         xmlWriteTerminal("symbol", @token.symbol) 
-        xmlWriteNonTerminal("term", "end") 
         @token = @tokens.shift()
         result = true
       end
@@ -849,7 +845,6 @@ class CompilationEngine
       symbols = [")"]
       if checkSymbol(@token, symbols)
         xmlWriteTerminal("symbol", @token.symbol) 
-        xmlWriteNonTerminal("term", "end") 
         @token = @tokens.shift()
         result = true
       end
@@ -873,7 +868,6 @@ class CompilationEngine
       symbols = [")"]
       if checkSymbol(@token, symbols)
         xmlWriteTerminal("symbol", @token.symbol)  
-        xmlWriteNonTerminal("term", "end") 
         @token = @tokens.shift()                    
         result = true
       end
@@ -881,9 +875,8 @@ class CompilationEngine
 
     if state === ST_TERM_UNARY_OPERATOR
       result = compileTerm() 
-      xmlWriteNonTerminal("term", "end") 
     end
-       
+    xmlWriteNonTerminal("term", "end")   
     return result
   end
 
@@ -977,6 +970,6 @@ class CompilationEngine
 
   def xmlWriteTerminal(name, value)
     xmlWriteIndent()
-    @xmlFile.print "<"+name+">" + "\"" + value + "\"" + "</"+name+">\n"
+    @xmlFile.print "<"+name+">" + " " + value + " " + "</"+name+">\n"
   end  
 end

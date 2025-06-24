@@ -78,6 +78,7 @@ class JackTokenizer
   end
 
   def getTokens(line)
+    inString = false
     field = ""
     tokens =[]
     chars = line.split(//)
@@ -89,10 +90,21 @@ class JackTokenizer
           field = ""
         end
         tokens.push(c)
+      elsif c === "\""
+        field = field.concat(c) 
+        if inString 
+          inString = false
+        else
+          inString = true
+        end
       elsif c === " "
-        if (field.length > 0)
-          tokens.push(field)
-          field = ""
+        if inString
+          field = field.concat(c) 
+        else
+          if (field.length > 0)
+            tokens.push(field)
+            field = ""
+          end
         end
       else
         field = field.concat(c)  
@@ -152,7 +164,7 @@ class JackTokenizer
   end
 
   def checkConstant(token)
-    if token =~ /^\"\w+\"$/
+    if token =~ /^\"[\w\W]+\"$/
       return true
     end
     return false

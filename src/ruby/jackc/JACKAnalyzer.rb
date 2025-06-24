@@ -8,6 +8,8 @@ def tokenize(jackTokenizer)
   while jackTokenizer.hasMoreTokens
     token = jackTokenizer.advance
     tokenType = jackTokenizer.tokenType
+    print tokenType
+    print " "
     print token
     print "\n"
     if tokenType == TK_KEYWORD
@@ -34,7 +36,7 @@ def tokenize(jackTokenizer)
   end
   return tokens
 end
-classLists = ["Square"]
+classLists = ["Square", "SquareGame", "String", "Array"]
 jackFile = ARGV.shift
 if File.directory?(jackFile)
   Dir.chdir(jackFile)
