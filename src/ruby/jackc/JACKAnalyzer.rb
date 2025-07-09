@@ -7,11 +7,9 @@ def tokenize(jackTokenizer)
   tokens = []
   while jackTokenizer.hasMoreTokens
     token = jackTokenizer.advance
-    tokenType = jackTokenizer.tokenType
-    print tokenType
-    print " "
     print token
     print "\n"
+    tokenType = jackTokenizer.tokenType
     if tokenType == TK_KEYWORD
       keyWord = jackTokenizer.keyWord
       tk = TokenClass.new(token, tokenType, keyWord, "", "", 0, "")
@@ -36,11 +34,15 @@ def tokenize(jackTokenizer)
   end
   return tokens
 end
-classLists = ["Square", "SquareGame", "String", "Array"]
+classLists = ["Math", "String", "Array", "Output", "Screen", "Keyboard", "Memory", "Sys"]
 jackFile = ARGV.shift
 if File.directory?(jackFile)
   Dir.chdir(jackFile)
   jackFiles = Dir.glob("*.jack")
+  for jackFilename in jackFiles
+    className = jackFilename.gsub(/.jack/, "")
+    classLists.push(className)
+  end
   for jackFilename in jackFiles
     xmlFilename = jackFilename.gsub(/jack/, "xml")
     jackTokenizer = JackTokenizer.new(jackFilename)
@@ -49,6 +51,9 @@ if File.directory?(jackFile)
   end
 else
   jackFilename = jackFile
+  # this is not good. 
+  className = jackFilename.gsub(/.jack/, "")
+  classLists.push(className)
   xmlFilename = jackFilename.gsub(/jack/, "xml")
   jackTokenizer = JackTokenizer.new(jackFilename)
   tokens = tokenize(jackTokenizer)

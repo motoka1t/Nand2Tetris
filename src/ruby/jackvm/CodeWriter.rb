@@ -356,7 +356,6 @@ class CodeWriter
 
   def writeFunction(functionName, numLocals)
     writeDebugComment1("function" + functionName)
-
     writeLabel1(functionName)
     @functionName = functionName
     # repete k times

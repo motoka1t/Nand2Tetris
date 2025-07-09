@@ -84,16 +84,22 @@ class JackTokenizer
     chars = line.split(//)
     while (chars.length > 0)
       c = chars.shift
-      if checkSymbol(c)     
-        if (field.length > 0)
-          tokens.push(field)
-          field = ""
+      if checkSymbol(c)
+        if inString
+          field = field.concat(c) 
+        else
+          if (field.length > 0)
+            tokens.push(field)
+            field = ""
+          end
+          tokens.push(c)
         end
-        tokens.push(c)
       elsif c === "\""
         field = field.concat(c) 
         if inString 
           inString = false
+          tokens.push(field)
+          field = ""
         else
           inString = true
         end
